@@ -15,7 +15,6 @@ absolute_path = os.path.abspath(os.path.join(current_dir, file_path))
 absolute_faq_path = os.path.abspath(os.path.join(current_dir, faq_path))
 
 MAC_DOC = 150
-# loaders = [TextLoader(os.path.join(absolute_path, fn)) for fn in os.listdir(absolute_path)[:MAC_DOC]]
 loaders = [TextLoader(os.path.join(absolute_path, fn)) for fn in os.listdir(absolute_path)]
 loaders.extend([TextLoader(os.path.join(absolute_faq_path, fn)) for fn in os.listdir(absolute_faq_path)])
 documents = [loader.load()[0] for loader in loaders]
@@ -28,7 +27,7 @@ for loader in loaders:
     documents.extend(loader.load_and_split())
 
 # generator with openai models
-generator_llm = ChatOpenAI(model="gpt-3.5-turbo-16k")
+generator_llm = ChatOpenAI(model="gpt-4-turbo")
 critic_llm = ChatOpenAI(model="gpt-4")
 embeddings = OpenAIEmbeddings()
 
@@ -37,13 +36,15 @@ generator = TestsetGenerator.from_langchain(
     critic_llm,
     embeddings
 )
+generator.adapt('zh-tw', [simple, multi_context, reasoning, conditional])
+generator.save([simple, multi_context, reasoning, conditional])
 
 # Change resulting question type distribution
 distributions = {
-    simple: 0,
-    multi_context: 0,
-    reasoning: 0,
-    conditional:1
+    simple: 0.25,
+    multi_context: 0.25,
+    reasoning: 0.25,
+    conditional:0.25
 }
 
 # use generator.generate_with_llamaindex_docs if you use llama-index as document loader
