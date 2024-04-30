@@ -133,6 +133,8 @@ class Evolution:
         return CurrentNodes(root_node=new_node, nodes=[new_node])
 
     async def evolve(self, current_nodes: CurrentNodes) -> DataRow:
+        self.adapt('zh-tw')
+        self.save()
         # init tries with 0 when first called
         current_tries = 0
         (

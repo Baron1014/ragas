@@ -80,7 +80,7 @@ class TestsetGenerator:
         embeddings: Embeddings,
         docstore: t.Optional[DocumentStore] = None,
         run_config: t.Optional[RunConfig] = None,
-        chunk_size: int = 1024,
+        chunk_size: int = 2048,
     ) -> "TestsetGenerator":
         generator_llm_model = LangchainLLMWrapper(generator_llm)
         critic_llm_model = LangchainLLMWrapper(critic_llm)

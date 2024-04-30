@@ -262,8 +262,9 @@ class Prompt(BaseModel):
             os.makedirs(cache_dir)
 
         cache_path = os.path.join(cache_dir, f"{self.name}.json")
-        with open(cache_path, "w") as file:
-            json.dump(self.dict(), file, indent=4)
+        if not os.path.exists(cache_path):
+            with open(cache_path, "w") as file:
+                json.dump(self.dict(), file, indent=4)
 
     @classmethod
     def _load(cls, language: str, name: str, cache_dir: str) -> Prompt:
@@ -285,6 +286,11 @@ str_translation = Prompt(
             "translate_to": "dutch",
             "input": "Who was queen Elizabeth and what is she best known for?",
             "output": "Wie was koningin Elizabeth en waar is zij het meest bekend om?",
+        },
+        {
+            "translate_to": "zh-tw",
+            "input": "Who was queen Elizabeth and what is she best known for?",
+            "output": "伊莉莎白女王是誰，她最著名的是什麼？",
         },
     ],
     input_keys=["translate_to", "input"],
@@ -323,6 +329,21 @@ json_translatation = Prompt(
                 "statements": [
                     "Parijs is de hoofdstad van Frankrijk.",
                     "Croissants zijn een populair Frans gebak.",
+                ]
+            },
+        },
+        {
+            "translate_to": "zh-tw",
+            "input": {
+                "statements": [
+                    "Paris is the capital of France.",
+                    "Croissants are a popular French pastry.",
+                ]
+            },
+            "output": {
+                "statements": [               
+                    "巴黎是法國的首都。",
+                    "可頌麵包是一種受歡迎的法國糕點。",
                 ]
             },
         },
